@@ -127,19 +127,13 @@ st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
 jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
 
 # Criar gráfico de pizza com Altair
-raio_do_circulo = 150  # Ajuste o raio conforme necessário
-figura_pizza = alt.Chart(jogos_com_avaliacao_negativa).mark_circle(size=raio_do_circulo).encode(
+figura_pizza = alt.Chart(jogos_com_avaliacao_negativa).mark_arc().encode(
     theta='user_reviews:Q',
     color='title:N',
-    size=alt.Size('user_reviews:Q', legend=None),
     tooltip=['title:N', 'user_reviews:Q']
-).configure_circle(
-    fillOpacity=0.8
-).configure_view(
-    stroke=None
 ).properties(
-    width=2 * raio_do_circulo,
-    height=2 * raio_do_circulo
+    width=400,
+    height=400
 )
 
 st.altair_chart(figura_pizza, use_container_width=True)
