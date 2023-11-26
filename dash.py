@@ -5,8 +5,7 @@ st.set_page_config(layout="wide")
 
 
 # Título do Dashboard
-if pd.api.types.is_datetime64_any_dtype(df['date_release']):
-    st.write("### Análise do Custo-Benefício na Compra de Jogos na Steam 🕹️")
+ st.write("### Análise do Custo-Benefício na Compra de Jogos na Steam 🕹️")
 
 # Converter a coluna 'date_release' para datetime, se ainda não estiver no formato certo
 if 'date_release' in df.columns and pd.api.types.is_object_dtype(df['date_release']):
