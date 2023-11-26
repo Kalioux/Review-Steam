@@ -136,6 +136,21 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
 
     st.altair_chart(chart_negative_free_games, use_container_width=True)
 
+# Gráfico de jogos compatíveis com todas as plataformas
+    st.write("### Jogos Compatíveis com Todas as Plataformas:")
+    all_platforms = df[(df['mac'] == True) & (df['win'] == True) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
+
+    chart_all_platforms = alt.Chart(all_platforms).mark_bar().encode(
+        x='user_reviews:Q',
+        y=alt.Y('title:N', sort='-x'),
+        color='title:N',
+        tooltip=['title:N', 'user_reviews:Q']
+    ).configure_axis(
+        labels=False
+    )
+
+    st.altair_chart(chart_all_platforms, use_container_width=True)
+
     # Porcentagem de jogos com desconto
 st.write("### Porcentagem de Jogos com Desconto:")
 percentage_discounted = int((df['discount'].sum() / len(df)) * 100)
