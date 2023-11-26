@@ -3,7 +3,7 @@ import streamlit as st
 import altair as alt
 st.set_page_config(layout="wide")
 
-if pd.api.types.is_datetime64_any_dtype(df['date_release']):
+
     st.title("Análise do Custo-Benefício na Compra de Jogos na Steam 🕹️")
 # Carregar a base de dados
 df = pd.read_csv('games.csv')
