@@ -1,5 +1,5 @@
-import matplotlib
-matplotlib.use('Agg')  # Use a opção 'Agg' para renderizar sem uma interface gráfica
+#import matplotlib
+#matplotlib.use('Agg')  # Use a opção 'Agg' para renderizar sem uma interface gráfica
 
 import matplotlib.pyplot as plt
 import seaborn as sns
