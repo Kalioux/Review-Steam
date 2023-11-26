@@ -2,9 +2,12 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 st.set_page_config(layout="wide")
-import matplotlib.pyplot as plt
+
 # Carregar a base de dados
 df = pd.read_csv('games.csv')
+
+if pd.api.types.is_datetime64_any_dtype(df['date_release']):
+    st.title("Análise do Custo-Benefício na Compra de Jogos na Plataforma Steam")
 
 # Converter a coluna 'date_release' para datetime, se ainda não estiver no formato certo
 if 'date_release' in df.columns and pd.api.types.is_object_dtype(df['date_release']):
@@ -46,19 +49,27 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.altair_chart(chart_populares, use_container_width=True)
 
     # Top 5 jogos mais populares no Mac, Windows e Linux
-    st.write("### Top 5 Jogos Mais Populares por Plataforma:")
+   st.write("### Top 5 Jogos Mais Populares por Plataforma:")
+
+    # Mac
     mac = df.loc[(df['positive_ratio'] >= 90) & (df['mac'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head()
     win = df.loc[(df['positive_ratio'] >= 90) & (df['win'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
     linux = df.loc[(df['positive_ratio'] >= 90) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
-    st.write("#### Mac:")
-    st.write(mac[['title', 'user_reviews', 'positive_ratio']])
+    # Criar colunas para exibir tabelas na horizontal
+    col1, col2, col3 = st.columns(3)
 
-    st.write("#### Windows:")
-    st.write(win[['title', 'user_reviews', 'positive_ratio']])
+    with col1:
+        st.write("#### Mac:")
+        st.table(mac[['title', 'user_reviews', 'positive_ratio']])
 
-    st.write("#### Linux:")
-    st.write(linux[['title', 'user_reviews', 'positive_ratio']])
+    with col2:
+        st.write("#### Windows:")
+        st.table(win[['title', 'user_reviews', 'positive_ratio']])
+
+    with col3:
+        st.write("#### Linux:")
+        st.table(linux[['title', 'user_reviews', 'positive_ratio']])
 
     # Plataforma mais compatível com os jogos avaliados
     st.write("### Plataforma mais compatível com os jogos avaliados:")
