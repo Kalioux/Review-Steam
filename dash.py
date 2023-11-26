@@ -9,15 +9,14 @@ df = pd.read_csv('games.csv')
 
 # Título do Dashboard
 st.write("# Análise do Custo-Benefício na Compra de Jogos na Steam 🕹️")
-  # Paleta de cores para os gráficos iniciais (vivas e distintas)
-    vibrant_palette = alt.Scale(domain='title', range=['#FF5733', '#33FF57', '#5733FF', '#FF3366', '#33A7FF'])
 
-    # Paleta de cores para os gráficos finais (tons mais suaves)
-    pastel_palette = alt.Scale(domain='title', range=['#FFD9B2', '#FFCCCC', '#FFE6D9', '#FFF2E6', '#FFFFFF'])
-
+# Converter a coluna 'date_release' para datetime, se ainda não estiver no formato certo
+if 'date_release' in df.columns and pd.api.types.is_object_dtype(df['date_release']):
+    df['date_release'] = pd.to_datetime(df['date_release'], errors='coerce')
 
 # Verificar se a conversão foi bem-sucedida
- # Exibir a base de dados
+if pd.api.types.is_datetime64_any_dtype(df['date_release']):
+    # Exibir a base de dados
     st.write("### Base de Dados:")
     st.write(df)
 
