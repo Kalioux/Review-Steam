@@ -160,40 +160,22 @@ st.write(f"Aproximadamente {percentage_discounted} jogos possuem desconto.")
 st.write("### Porcentagem de Jogos Compatíveis com Steam Deck:")
 percentage_steam_deck = int((df['steam_deck'].sum() / len(df)) * 100)
 st.write(f"Aproximadamente {percentage_steam_deck}% dos jogos são compatíveis com Steam Deck.")
-# Top 3 Jogos Gratuitos com Avaliação Negativa em gráfico de barras
-st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
-jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
-
-chart_negative_free_games_bar = alt.Chart(jogos_com_avaliacao_negativa).mark_bar().encode(
-    x='user_reviews:Q',
-    y=alt.Y('title:N', sort='x'),
-    color=alt.Color('title:N', scale=alt.Scale(scheme='dark2')),
-    tooltip=['title:N', 'user_reviews:Q']
-).configure_axis(
-    labels=False
-)
-
-st.altair_chart(chart_negative_free_games_bar, use_container_width=True)
-
-# Top 3 Jogos Gratuitos com Avaliação Negativa em gráfico de dispersão (scatter plot)
-chart_negative_free_games_scatter = alt.Chart(jogos_com_avaliacao_negativa).mark_circle().encode(
-    x='user_reviews:Q',
-    y='positive_ratio:Q',
-    color=alt.Color('title:N', scale=alt.Scale(scheme='dark2')),
-    tooltip=['title:N', 'user_reviews:Q', 'positive_ratio:Q']
-)
-
-st.altair_chart(chart_negative_free_games_scatter, use_container_width=True)
-
-# Top 3 Jogos Gratuitos com Avaliação Negativa em gráfico de linha
-chart_negative_free_games_line = alt.Chart(jogos_com_avaliacao_negativa).mark_line().encode(
-    x='title:N',
-    y='user_reviews:Q',
-    color=alt.Color('title:N', scale=alt.Scale(scheme='dark2')),
-    tooltip=['title:N', 'user_reviews:Q']
-)
-
-st.altair_chart(chart_negative_free_games_line, use_container_width=True)
-
 
 # that´s all folks...
+
+
+import matplotlib.pyplot as plt
+
+
+# Crie um gráfico de barras
+x = ["A", "B", "C", "D"]
+y = [10, 20, 30, 40]
+
+# Crie um objeto Figure do Matplotlib
+fig = plt.figure()
+
+# Adicione um gráfico de barras ao objeto Figure
+plt.bar(x, y)
+
+# Exiba o gráfico no Streamlit
+st.pyplot(fig)
