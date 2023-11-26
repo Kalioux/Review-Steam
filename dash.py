@@ -144,5 +144,3 @@ st.write("### Porcentagem de Jogos Compatíveis com Steam Deck:")
 percentage_steam_deck = int((df['steam_deck'].sum() / len(df)) * 100)
 st.write(f"Aproximadamente {percentage_steam_deck}% dos jogos são compatíveis com Steam Deck.")
 
-else:
-    st.write("Erro na conversão da coluna 'date_release' para datetime.")
