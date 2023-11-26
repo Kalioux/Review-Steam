@@ -163,15 +163,3 @@ percentage_steam_deck = int((df['steam_deck'].sum() / len(df)) * 100)
 st.write(f"Aproximadamente {percentage_steam_deck}% dos jogos são compatíveis com Steam Deck.")
 
 # that´s all folks...
-    st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
-    jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
-
-    fig = px.pie(
-        jogos_com_avaliacao_negativa,
-        values='user_reviews',
-        names='title',
-        title='Distribuição das Avaliações Negativas',
-        hole=0.4
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
