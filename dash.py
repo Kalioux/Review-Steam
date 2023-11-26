@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 import altair as alt
-
+st.set_page_config(layout="wide")
 # Carregar a base de dados
 df = pd.read_csv('games.csv')
 
