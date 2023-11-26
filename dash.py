@@ -1,6 +1,7 @@
-import streamlit as st
+
 import pandas as pd
 import matplotlib.pyplot as plt
+import streamlit as st
 
 def plot_top_popular_games_last_five_years():
     df = pd.read_csv('games.csv')
@@ -43,4 +44,3 @@ def plot_top_popular_games_last_five_years():
 
 # Chame a função para exibir o gráfico no Streamlit
 plot_top_popular_games_last_five_years()
-
