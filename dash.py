@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 st.set_page_config(layout="wide")
+
 # Carregar a base de dados
 df = pd.read_csv('games.csv')
 
@@ -11,7 +12,8 @@ if 'date_release' in df.columns and pd.api.types.is_object_dtype(df['date_releas
 
 # Verificar se a conversão foi bem-sucedida
 if pd.api.types.is_datetime64_any_dtype(df['date_release']):
-    st.title("Análise do Custo-Benefício na Compra de Jogos na Plataforma Steam")
+    st.write("### Base de Dados:")
+    st.write(df)
 
     # Top 5 jogos mais caros
     st.write("### Top 5 Jogos Mais Caros:")
@@ -45,32 +47,30 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
 
     # Top 5 jogos mais populares no Mac, Windows e Linux
     st.write("### Top 5 Jogos Mais Populares por Plataforma:")
-
-    # Mac
     mac = df.loc[(df['positive_ratio'] >= 90) & (df['mac'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head()
-    st.write("#### Mac:")
-    st.table(mac[['title', 'user_reviews', 'positive_ratio']])
-
-    # Windows
     win = df.loc[(df['positive_ratio'] >= 90) & (df['win'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
-    st.write("#### Windows:")
-    st.table(win[['title', 'user_reviews', 'positive_ratio']])
-
-    # Linux
     linux = df.loc[(df['positive_ratio'] >= 90) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
+
+    st.write("#### Mac:")
+    st.write(mac[['title', 'user_reviews', 'positive_ratio']])
+
+    st.write("#### Windows:")
+    st.write(win[['title', 'user_reviews', 'positive_ratio']])
+
     st.write("#### Linux:")
-    st.table(linux[['title', 'user_reviews', 'positive_ratio']])
+    st.write(linux[['title', 'user_reviews', 'positive_ratio']])
 
     # Plataforma mais compatível com os jogos avaliados
     st.write("### Plataforma mais compatível com os jogos avaliados:")
     labels = 'Windows', 'MacOS', 'Linux'
     sizes = [50076, 13018, 9041]
-    colors = ['#5CAD56', '#FF8D4D', '#8D9EB2']
+    colors = [(0.4, 0.7608, 0.6471), (0.9882, 0.5529, 0.3843), (0.5529, 0.6275, 0.7961)]
+    explode = (0.07, 0.05, 0)
 
     chart_platforms = alt.Chart(pd.DataFrame({'labels': labels, 'sizes': sizes})).mark_bar().encode(
-        y='sizes:O',
-        x=alt.X('labels:N', sort='-y'),
-        color=alt.Color('labels:N', scale=alt.Scale(range=colors)),
+        x='sizes:O',
+        y=alt.Y('labels:N', sort='-x'),
+        color='labels:N',
         tooltip=['labels:N', 'sizes:O']
     ).configure_axis(
         labels=False
@@ -123,17 +123,14 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
 
     st.altair_chart(chart_negative_free_games, use_container_width=True)
 
-    # Gráfico de pizza para a distribuição de plataformas
-    st.write("### Distribuição de Plataformas:")
-    sizes = [50076, 13018, 9041]
-    labels = ['Windows', 'MacOS', 'Linux']
-    colors = ['#5CAD56', '#FF8D4D', '#8D9EB2']
+    # Porcentagem de jogos com desconto
+    st.write("### Porcentagem de Jogos com Desconto:")
+    percentage_discounted = (df['discount'].sum() / len(df)) * 100
+    st.write(f"Aproximadamente {percentage_discounted:.2f}% dos jogos possuem desconto.")
 
-    fig, ax = plt.subplots()
-    ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90, colors=colors)
-    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-
-    st.pyplot(fig)
-
+    # Porcentagem de jogos compatíveis com Steam Deck
+    st.write("### Porcentagem de Jogos Compatíveis com Steam Deck:")
+    percentage_steam_deck = (df['steam_deck'].sum() / len(df)) * 100
+    st.write(f"Aproximadamente {percentage_steam_deck:.2f}% dos jogos são compatíveis com Steam Deck.")
 else:
     st.write("Erro na conversão da coluna 'date_release' para datetime.")
