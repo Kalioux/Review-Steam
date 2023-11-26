@@ -27,7 +27,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
 st.write("### Top 5 Jogos Mais Caros:")
 expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
 
-# Criar gráfico de barras com linha de avaliação dos usuários
+    # Criar gráfico de barras com linha de avaliação dos usuários
 chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
     x='price_final:Q',
     y=alt.Y('title:N', sort='-x'),
@@ -37,13 +37,13 @@ chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
     labels=False
 )
 
-# Adicionar a linha de avaliação dos usuários
+   # Adicionar a linha de avaliação dos usuários
 average_user_rating = df['user_reviews'].mean()
 rule = alt.Chart(pd.DataFrame({'average_user_rating': [average_user_rating]})).mark_rule(color='red').encode(
     y='average_user_rating:Q'
 )
 
-st.altair_chart(chart_expensive_games + rule, use_container_width=True)
+    st.altair_chart(chart_expensive_games + rule, use_container_width=True)
 
 
     # Top jogos mais populares nos últimos 5 anos
