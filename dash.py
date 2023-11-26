@@ -50,16 +50,19 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
 
     # Top 5 jogos mais populares no Mac, Windows e Linux
     st.write("### Top 5 Jogos Mais Populares por Plataforma:")
-    mac = df.loc[(df['positive_ratio'] >= 90) & (df['mac'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head()
-    win = df.loc[(df['positive_ratio'] >= 90) & (df['win'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
-    linux = df.loc[(df['positive_ratio'] >= 90) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
+    # Mac
+    mac = df.loc[(df['positive_ratio'] >= 90) & (df['mac'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head()
     st.write("#### Mac:")
     st.table(mac[['title', 'user_reviews', 'positive_ratio']])
 
+    # Windows
+    win = df.loc[(df['positive_ratio'] >= 90) & (df['win'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
     st.write("#### Windows:")
     st.table(win[['title', 'user_reviews', 'positive_ratio']])
 
+    # Linux
+    linux = df.loc[(df['positive_ratio'] >= 90) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
     st.write("#### Linux:")
     st.table(linux[['title', 'user_reviews', 'positive_ratio']])
 
@@ -86,63 +89,4 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
 
     # Top 5 menos populares nos últimos anos
     st.write("### Top 5 Jogos Menos Populares nos Últimos Anos:")
-    dados_menos_populares = df.loc[(df['date_release'].dt.year >= 2019) & (df['positive_ratio'] <= 15)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
-
-    chart_unpopular_games = alt.Chart(dados_menos_populares).mark_bar().encode(
-        x='user_reviews:Q',
-        y=alt.Y('title:N', sort='-x'),
-        color='title:N',
-        tooltip=['title:N', 'user_reviews:Q']
-    ).properties(
-        title='Top 5 Jogos Menos Populares (2019 - Atual)',
-        width=600,
-        height=400
-    )
-
-    st.altair_chart(chart_unpopular_games, use_container_width=True)
-
-    # Top 3 jogos grátis bem avaliados
-    st.write("### Top 3 Jogos Grátis Bem Avaliados:")
-    jogos_gratis_bem_avaliados = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] >= 90)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
-
-    chart_free_positive_games = alt.Chart(jogos_gratis_bem_avaliados).mark_bar().encode(
-        x='user_reviews:Q',
-        y=alt.Y('title:N', sort='-x'),
-        color='title:N',
-        tooltip=['title:N', 'user_reviews:Q']
-    ).properties(
-        title='Top 3 Jogos Grátis Bem Avaliados',
-        width=600,
-        height=400
-    )
-
-    st.altair_chart(chart_free_positive_games, use_container_width=True)
-
-    # Top 3 com avaliação negativa
-    st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
-    jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
-
-    chart_negative_free_games = alt.Chart(jogos_com_avaliacao_negativa).mark_bar().encode(
-        x='user_reviews:Q',
-        y=alt.Y('title:N', sort='x'),
-        color='title:N',
-        tooltip=['title:N', 'user_reviews:Q']
-    ).properties(
-        title='Top 3 Jogos Gratuitos com Avaliação Negativa',
-        width=600,
-        height=400
-    )
-
-    st.altair_chart(chart_negative_free_games, use_container_width=True)
-
-    # Porcentagem de jogos com desconto
-    st.write("### Porcentagem de Jogos com Desconto:")
-    percentage_discounted = (df['discount'].sum() / len(df)) * 100
-    st.write(f"Aproximadamente {percentage_discounted:.2f}% dos jogos possuem desconto.")
-
-    # Porcentagem de jogos compatíveis com Steam Deck
-    st.write("### Porcentagem de Jogos Compatíveis com Steam Deck:")
-    percentage_steam_deck = (df['steam_deck'].sum() / len(df)) * 100
-    st.write(f"Aproximadamente {percentage_steam_deck:.2f}% dos jogos são compatíveis com Steam Deck.")
-else:
-    st.write("Erro na conversão da coluna 'date_release' para datetime.")
+    dados_menos_populares = df.loc[(df['date
