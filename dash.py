@@ -18,13 +18,15 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.write("### Top 5 Jogos Mais Caros:")
     expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
 
-    chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
-        x='price_final:Q',
-        y=alt.Y('title:N', sort='-x'),
+    chart_expensive_games = alt.Chart(expensive_games).mark_point(filled=True, size=100).encode(
+        x='positive_ratio:Q',
+        y='price_final:Q',
         color='title:N',
-        tooltip=['title:N', 'price_final:Q']
-    ).configure_axis(
-        labels=False
+        tooltip=['title:N', 'positive_ratio:Q', 'price_final:Q']
+    ).properties(
+        title='Top 5 Jogos Mais Caros (Avaliação vs. Preço)',
+        width=600,
+        height=400
     )
 
     st.altair_chart(chart_expensive_games, use_container_width=True)
@@ -38,8 +40,10 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
         y=alt.Y('title:N', sort='-x'),
         color='title:N',
         tooltip=['title:N', 'user_reviews:Q']
-    ).configure_axis(
-        labels=False
+    ).properties(
+        title='Top Jogos Mais Populares (2019 - 2023)',
+        width=600,
+        height=400
     )
 
     st.altair_chart(chart_populares, use_container_width=True)
@@ -51,28 +55,31 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     linux = df.loc[(df['positive_ratio'] >= 90) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
     st.write("#### Mac:")
-    st.write(mac[['title', 'user_reviews', 'positive_ratio']])
+    st.table(mac[['title', 'user_reviews', 'positive_ratio']])
 
     st.write("#### Windows:")
-    st.write(win[['title', 'user_reviews', 'positive_ratio']])
+    st.table(win[['title', 'user_reviews', 'positive_ratio']])
 
     st.write("#### Linux:")
-    st.write(linux[['title', 'user_reviews', 'positive_ratio']])
+    st.table(linux[['title', 'user_reviews', 'positive_ratio']])
 
     # Plataforma mais compatível com os jogos avaliados
     st.write("### Plataforma mais compatível com os jogos avaliados:")
     labels = 'Windows', 'MacOS', 'Linux'
     sizes = [50076, 13018, 9041]
-    colors = [(0.4, 0.7608, 0.6471), (0.9882, 0.5529, 0.3843), (0.5529, 0.6275, 0.7961)]
-    explode = (0.07, 0.05, 0)
+    colors = ['#5CAD56', '#FF8D4D', '#8D9EB2']
 
     chart_platforms = alt.Chart(pd.DataFrame({'labels': labels, 'sizes': sizes})).mark_bar().encode(
-        x='sizes:O',
-        y=alt.Y('labels:N', sort='-x'),
-        color='labels:N',
+        y='sizes:O',
+        x=alt.X('labels:N', sort='-y'),
+        color=alt.Color('labels:N', scale=alt.Scale(range=colors)),
         tooltip=['labels:N', 'sizes:O']
     ).configure_axis(
         labels=False
+    ).properties(
+        title='Plataforma mais compatíveis com os jogos avaliados',
+        width=600,
+        height=400
     )
 
     st.altair_chart(chart_platforms, use_container_width=True)
@@ -86,8 +93,10 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
         y=alt.Y('title:N', sort='-x'),
         color='title:N',
         tooltip=['title:N', 'user_reviews:Q']
-    ).configure_axis(
-        labels=False
+    ).properties(
+        title='Top 5 Jogos Menos Populares (2019 - Atual)',
+        width=600,
+        height=400
     )
 
     st.altair_chart(chart_unpopular_games, use_container_width=True)
@@ -101,8 +110,10 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
         y=alt.Y('title:N', sort='-x'),
         color='title:N',
         tooltip=['title:N', 'user_reviews:Q']
-    ).configure_axis(
-        labels=False
+    ).properties(
+        title='Top 3 Jogos Grátis Bem Avaliados',
+        width=600,
+        height=400
     )
 
     st.altair_chart(chart_free_positive_games, use_container_width=True)
@@ -116,8 +127,10 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
         y=alt.Y('title:N', sort='x'),
         color='title:N',
         tooltip=['title:N', 'user_reviews:Q']
-    ).configure_axis(
-        labels=False
+    ).properties(
+        title='Top 3 Jogos Gratuitos com Avaliação Negativa',
+        width=600,
+        height=400
     )
 
     st.altair_chart(chart_negative_free_games, use_container_width=True)
