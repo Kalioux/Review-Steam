@@ -49,7 +49,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.altair_chart(chart_populares, use_container_width=True)
 
     # Top 5 jogos mais populares no Mac, Windows e Linux
-   st.write("### Top 5 Jogos Mais Populares por Plataforma:")
+    st.write("### Top 5 Jogos Mais Populares por Plataforma:")
 
     # Mac
     mac = df.loc[(df['positive_ratio'] >= 90) & (df['mac'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head()
