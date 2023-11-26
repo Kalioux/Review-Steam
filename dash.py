@@ -1,7 +1,8 @@
 import pandas as pd
 import streamlit as st
-import altair as alt
 import plotly.express as px
+import altair as alt
+from vega_datasets import data
 
 emoji = "🎮"
 
@@ -122,19 +123,24 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
 
     st.altair_chart(chart_free_positive_games, use_container_width=True)
 
-       # Top 3 Jogos Gratuitos com Avaliação Negativa em gráfico de pizza
-    st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
-    jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
+     # Top 3 jogos grátis bem avaliados
+st.write("### Top 3 Jogos Grátis Bem Avaliados:")
+jogos_gratis_bem_avaliados = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] >= 90)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
 
-    fig = px.pie(
-        jogos_com_avaliacao_negativa,
-        values='user_reviews',
-        names='title',
-        title='Distribuição das Avaliações Negativas',
-        hole=0.4
-    )
+chart_free_positive_games = alt.Chart(jogos_gratis_bem_avaliados).mark_bar().encode(
+    x='user_reviews:Q',
+    y=alt.Y('title:N', sort='-x'),
+    color=alt.Color('title:N', scale=alt.Scale(scheme='pastel1')),
+    tooltip=['title:N', 'user_reviews:Q']
+).configure_axis(
+    labels=False
+)
 
-    st.plotly_chart(fig, use_container_width=True)
+# Convertendo o gráfico Altair para Plotly
+altair_plotly_chart = st.altair_chart(chart_free_positive_games, use_container_width=True)
+
+# Exibindo o gráfico Plotly no Streamlit
+st.plotly_chart(altair_plotly_chart)
 
 
 # Gráfico de jogos compatíveis com todas as plataformas
