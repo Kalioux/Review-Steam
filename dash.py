@@ -2,7 +2,7 @@
 #matplotlib.use('Agg')  # Use a opção 'Agg' para renderizar sem uma interface gráfica
 
 #import matplotlib.pyplot as plt
-import seaborn as sns
+#import seaborn as sns
 import pandas as pd
 import numpy as np
 import streamlit as st
