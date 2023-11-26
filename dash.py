@@ -127,7 +127,7 @@ st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
 jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
 
 # Especificar cores desejadas
-cores_desejadas = [ '#4F81BD','#A1A1A1', '#D74747']
+cores_desejadas = [ '#001F3F','#555555','#800000']
 
 # Criar gráfico de setores (pizza) com Altair e especificar cores
 figura_pizza = alt.Chart(jogos_com_avaliacao_negativa).mark_arc().encode(
@@ -135,8 +135,8 @@ figura_pizza = alt.Chart(jogos_com_avaliacao_negativa).mark_arc().encode(
     color=alt.Color('title:N', scale=alt.Scale(range=cores_desejadas)),
     tooltip=['title:N', 'user_reviews:Q']
 ).properties(
-    width=700,
-    height=700
+    width=450,
+    height=450
 )
 
 st.altair_chart(figura_pizza, use_container_width=True)
