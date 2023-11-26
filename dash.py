@@ -77,13 +77,13 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.write("### Plataforma mais compatível com os jogos avaliados:")
     labels = 'Windows', 'MacOS', 'Linux'
     sizes = [50076, 13018, 9041]
-    colors = [(0.4, 0.7608, 0.6471), (0.9882, 0.5529, 0.3843), (0.5529, 0.6275, 0.7961)]
+    colors = [(0.8, 0.4, 0.2), (0.6, 0.3, 0.1), (0.7, 0.5, 0.3)]
     explode = (0.07, 0.05, 0)
 
     chart_platforms = alt.Chart(pd.DataFrame({'labels': labels, 'sizes': sizes})).mark_bar().encode(
         x='sizes:O',
         y=alt.Y('labels:N', sort='-x'),
-        color=alt.Color('labels:N', scale=alt.Scale(scheme='pastel1')),
+        color=alt.Color('labels:N', scale=alt.Scale(scheme=colors)),
         tooltip=['labels:N', 'sizes:O']
     ).configure_axis(
         labels=False
@@ -98,7 +98,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     chart_unpopular_games = alt.Chart(dados_menos_populares).mark_bar().encode(
         x='user_reviews:Q',
         y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='pastel1')),
+        color=alt.Color('title:N', scale=alt.Scale(scheme=colors)),
         tooltip=['title:N', 'user_reviews:Q']
     ).configure_axis(
         labels=False
@@ -113,7 +113,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     chart_free_positive_games = alt.Chart(jogos_gratis_bem_avaliados).mark_bar().encode(
         x='user_reviews:Q',
         y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='pastel1')),
+        color=alt.Color('title:N', scale=alt.Scale(scheme=colors)),
         tooltip=['title:N', 'user_reviews:Q']
     ).configure_axis(
         labels=False
@@ -128,7 +128,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     chart_negative_free_games = alt.Chart(jogos_com_avaliacao_negativa).mark_bar().encode(
         x='user_reviews:Q',
         y=alt.Y('title:N', sort='x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='pastel1')),
+        color=alt.Color('title:N', scale=alt.Scale(scheme=colors)),
         tooltip=['title:N', 'user_reviews:Q']
     ).configure_axis(
         labels=False
@@ -143,7 +143,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     chart_all_platforms = alt.Chart(all_platforms).mark_bar().encode(
         x='user_reviews:Q',
         y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='pastel1')),
+        color=alt.Color('title:N', scale=alt.Scale(scheme=colors)),
         tooltip=['title:N', 'user_reviews:Q']
     ).configure_axis(
         labels=False
