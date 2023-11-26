@@ -2,7 +2,12 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 st.set_page_config(layout="wide")
-st.markdown('**🕹️**')
+
+# Defina o emoji que você deseja usar (por exemplo, 🎮)
+emoji = "🎮"
+
+# Configure a página com o emoji na aba do navegador
+st.set_page_config(page_icon=emoji, layout="wide")
 # Carregar a base de dados
 df = pd.read_csv('games.csv')
 
