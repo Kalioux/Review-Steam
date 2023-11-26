@@ -1,8 +1,6 @@
 import pandas as pd
 import streamlit as st
 import altair as alt
-st.set_page_config(layout="wide")
-
 # Defina o emoji que você deseja usar (por exemplo, 🎮)
 emoji = "🎮"
 
