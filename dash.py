@@ -4,10 +4,9 @@ import altair as alt
 st.set_page_config(layout="wide")
 
 
+# Título do Dashboard
+if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.title("Análise do Custo-Benefício na Compra de Jogos na Steam 🕹️")
-# Carregar a base de dados
-df = pd.read_csv('games.csv')
-
 
 # Converter a coluna 'date_release' para datetime, se ainda não estiver no formato certo
 if 'date_release' in df.columns and pd.api.types.is_object_dtype(df['date_release']):
@@ -15,6 +14,7 @@ if 'date_release' in df.columns and pd.api.types.is_object_dtype(df['date_releas
 
 # Verificar se a conversão foi bem-sucedida
 if pd.api.types.is_datetime64_any_dtype(df['date_release']):
+    # Exibir a base de dados
     st.write("### Base de Dados:")
     st.write(df)
 
