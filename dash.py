@@ -133,7 +133,7 @@ figura_pizza = alt.Chart(jogos_com_avaliacao_negativa).mark_circle(size=600).enc
     size=alt.Size('user_reviews:Q', legend=None),
     tooltip=['title:N', 'user_reviews:Q']
 ).configure_circle(
-    fillOpacity=0.8
+    fillOpacity=0
 ).configure_view(
     stroke=None
 ).properties(
