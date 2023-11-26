@@ -3,11 +3,11 @@ import streamlit as st
 import altair as alt
 st.set_page_config(layout="wide")
 
+if pd.api.types.is_datetime64_any_dtype(df['date_release']):
+    st.title("Análise do Custo-Benefício na Compra de Jogos na Steam 🕹️")
 # Carregar a base de dados
 df = pd.read_csv('games.csv')
 
-if pd.api.types.is_datetime64_any_dtype(df['date_release']):
-    st.title("Análise do Custo-Benefício na Compra de Jogos na Steam 🕹️")
 
 # Converter a coluna 'date_release' para datetime, se ainda não estiver no formato certo
 if 'date_release' in df.columns and pd.api.types.is_object_dtype(df['date_release']):
@@ -137,7 +137,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     # Porcentagem de jogos com desconto
 st.write("### Porcentagem de Jogos com Desconto:")
 percentage_discounted = int((df['discount'].sum() / len(df)) * 100)
-st.write(f"Aproximadamente {percentage_discounted}% dos jogos possuem desconto.")
+st.write(f"Aproximadamente {percentage_discounted} jogos possuem desconto.")
 
 # Porcentagem de jogos compatíveis com Steam Deck
 st.write("### Porcentagem de Jogos Compatíveis com Steam Deck:")
