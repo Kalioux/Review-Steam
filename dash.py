@@ -2,7 +2,8 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 st.set_page_config(layout="wide")
-
+pip install matplotlib
+import matplotlib.pyplot as plt
 # Carregar a base de dados
 df = pd.read_csv('games.csv')
 
