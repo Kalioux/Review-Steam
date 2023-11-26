@@ -164,7 +164,7 @@ st.write(f"Aproximadamente {percentage_steam_deck}% dos jogos são compatíveis 
 # that´s all folks...
 
 
-import matplotlib as plt
+import mathplotlib.pyplot as plt
 
 
 # Crie um gráfico de barras
