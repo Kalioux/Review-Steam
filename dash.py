@@ -122,19 +122,27 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
 
     st.altair_chart(chart_free_positive_games, use_container_width=True)
 
-  # Top 3 Jogos Gratuitos com Avaliação Negativa em gráfico de pizza
+# Top 3 com avaliação negativa
 st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
 jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
 
-fig = px.pie(
-    jogos_com_avaliacao_negativa,
-    values='user_reviews',
-    names='title',
-    title='Distribuição das Avaliações Negativas',
-    hole=0.4
+# Criar gráfico de pizza com Altair
+figura_pizza = alt.Chart(jogos_com_avaliacao_negativa).mark_circle(size=600).encode(
+    x=alt.Value(0.5),
+    y=alt.Value(0.5),
+    color='title:N',
+    size='user_reviews:Q',
+    tooltip=['title:N', 'user_reviews:Q']
+).configure_circle(
+    fillOpacity=0.8
+).configure_view(
+    stroke=None
+).properties(
+    width=400,
+    height=400
 )
 
-st.plotly_chart(fig, use_container_width=True)
+st.altair_chart(figura_pizza, use_container_width=True)
 
 # Gráfico de jogos compatíveis com todas as plataformas
 st.write("### Jogos Compatíveis com Todas as Plataformas:")
