@@ -1,11 +1,11 @@
 import pandas as pd
 import streamlit as st
 import altair as alt
-# Defina o emoji que você deseja usar (por exemplo, 🎮)
+
 emoji = "🎮"
 
-# Configure a página com o emoji na aba do navegador
 st.set_page_config(page_icon=emoji, layout="wide")
+
 # Carregar a base de dados
 df = pd.read_csv('games.csv')
 
@@ -55,12 +55,10 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     # Top 5 jogos mais populares no Mac, Windows e Linux
     st.write("### Top 5 Jogos Mais Populares por Plataforma:")
 
-    # Mac
     mac = df.loc[(df['positive_ratio'] >= 90) & (df['mac'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head()
     win = df.loc[(df['positive_ratio'] >= 90) & (df['win'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
     linux = df.loc[(df['positive_ratio'] >= 90) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
-    # Criar colunas para exibir tabelas na horizontal
     col1, col2, col3 = st.columns(3)
 
     with col1:
@@ -163,3 +161,4 @@ st.write("### Porcentagem de Jogos Compatíveis com Steam Deck:")
 percentage_steam_deck = int((df['steam_deck'].sum() / len(df)) * 100)
 st.write(f"Aproximadamente {percentage_steam_deck}% dos jogos são compatíveis com Steam Deck.")
 
+# that´s all folks...
