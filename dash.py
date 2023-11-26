@@ -7,7 +7,8 @@ st.set_page_config(layout="wide")
 df = pd.read_csv('games.csv')
 
 if pd.api.types.is_datetime64_any_dtype(df['date_release']):
-    st.title("Análise do Custo-Benefício na Compra de Jogos na Plataforma Steam")
+    # Adicionando emoji ao título
+    st.title("🎮 Análise do Custo-Benefício na Compra de Jogos na Plataforma Steam")
 
 # Converter a coluna 'date_release' para datetime, se ainda não estiver no formato certo
 if 'date_release' in df.columns and pd.api.types.is_object_dtype(df['date_release']):
@@ -25,7 +26,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
         x='price_final:Q',
         y=alt.Y('title:N', sort='-x'),
-        color='title:N',
+        color=alt.Color('title:N', scale=alt.Scale(scheme='dark2')),
         tooltip=['title:N', 'price_final:Q']
     ).configure_axis(
         labels=False
@@ -40,7 +41,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     chart_populares = alt.Chart(dados_populares).mark_bar().encode(
         x='user_reviews:Q',
         y=alt.Y('title:N', sort='-x'),
-        color='title:N',
+        color=alt.Color('title:N', scale=alt.Scale(scheme='set1')),
         tooltip=['title:N', 'user_reviews:Q']
     ).configure_axis(
         labels=False
@@ -76,12 +77,11 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     labels = 'Windows', 'MacOS', 'Linux'
     sizes = [50076, 13018, 9041]
     colors = [(0.4, 0.7608, 0.6471), (0.9882, 0.5529, 0.3843), (0.5529, 0.6275, 0.7961)]
-    explode = (0.07, 0.05, 0)
 
     chart_platforms = alt.Chart(pd.DataFrame({'labels': labels, 'sizes': sizes})).mark_bar().encode(
         x='sizes:O',
         y=alt.Y('labels:N', sort='-x'),
-        color='labels:N',
+        color=alt.Color('labels:N', scale=alt.Scale(range=colors)),
         tooltip=['labels:N', 'sizes:O']
     ).configure_axis(
         labels=False
@@ -96,7 +96,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     chart_unpopular_games = alt.Chart(dados_menos_populares).mark_bar().encode(
         x='user_reviews:Q',
         y=alt.Y('title:N', sort='-x'),
-        color='title:N',
+        color=alt.Color('title:N', scale=alt.Scale(scheme='set2')),
         tooltip=['title:N', 'user_reviews:Q']
     ).configure_axis(
         labels=False
@@ -111,7 +111,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     chart_free_positive_games = alt.Chart(jogos_gratis_bem_avaliados).mark_bar().encode(
         x='user_reviews:Q',
         y=alt.Y('title:N', sort='-x'),
-        color='title:N',
+        color=alt.Color('title:N', scale=alt.Scale(scheme='pastel1')),
         tooltip=['title:N', 'user_reviews:Q']
     ).configure_axis(
         labels=False
@@ -126,7 +126,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     chart_negative_free_games = alt.Chart(jogos_com_avaliacao_negativa).mark_bar().encode(
         x='user_reviews:Q',
         y=alt.Y('title:N', sort='x'),
-        color='title:N',
+        color=alt.Color('title:N', scale=alt.Scale(scheme='set3')),
         tooltip=['title:N', 'user_reviews:Q']
     ).configure_axis(
         labels=False
