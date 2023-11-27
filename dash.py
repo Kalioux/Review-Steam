@@ -2,6 +2,11 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 
+
+emoji = "🎮"
+
+st.set_page_config(page_icon=emoji, layout="wide")
+
 # Carregar a base de dados
 df = pd.read_csv('games.csv')
 
@@ -18,40 +23,31 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.write("### Base de Dados:")
     st.write(df)
 
-    # Filtrar os jogos mais caros
+   # Top 5 jogos mais caros
+    st.write("### Top 5 Jogos Mais Caros:")
     expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
 
-    # Configuração do gráfico de barras horizontais
-    bar_chart = alt.Chart(expensive_games).mark_bar().encode(
+    chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
         x='price_final:Q',
         y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),
+        color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),  # Alterada para 'viridis'
         tooltip=['title:N', 'price_final:Q']
+    ).configure_axis(
+        labels=False
     )
 
-    # Configuração da linha para a avaliação positiva
-    line_chart = alt.Chart(expensive_games).mark_line(point=True).encode(
-        x='positive_ratio:Q',
-        y=alt.Y('title:N', sort='-x'),
-        color=alt.value('orange'),
-        tooltip=['title:N', 'positive_ratio:Q']
-    )
+    st.altair_chart(chart_expensive_games, use_container_width=True) 
 
-    # Combinar os gráficos de barras e linha
-    combined_chart = (bar_chart + line_chart).properties(height=300)
 
-    # Exibir o gráfico com o Streamlit
-    st.write("### Top 5 Jogos Mais Caros:")
-    st.altair_chart(combined_chart, use_container_width=True)
 
-      # Top jogos mais populares nos últimos 5 anos
+    # Top jogos mais populares nos últimos 5 anos
     st.write("### Top Jogos Mais Populares (2019 - 2023):")
     dados_populares = df.loc[(df['date_release'].dt.year >= 2019) & (df['date_release'].dt.year <= 2023)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
     chart_populares = alt.Chart(dados_populares).mark_bar().encode(
         x='user_reviews:Q',
         y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),
+        color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),  # Alterada para 'viridis'
         tooltip=['title:N', 'user_reviews:Q']
     ).configure_axis(
         labels=False
