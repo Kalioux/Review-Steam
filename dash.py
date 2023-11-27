@@ -58,74 +58,74 @@ chart_populares = alt.Chart(dados_populares).mark_bar().encode(
 st.altair_chart(chart_populares, use_container_width=True)
 
 
-    # Top 5 jogos mais populares no Mac, Windows e Linux
-    st.write("### Top 5 Jogos Mais Populares por Plataforma:")
+# Top 5 jogos mais populares no Mac, Windows e Linux
+st.write("### Top 5 Jogos Mais Populares por Plataforma:")
 
-    mac = df.loc[(df['positive_ratio'] >= 90) & (df['mac'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head()
-    win = df.loc[(df['positive_ratio'] >= 90) & (df['win'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
-    linux = df.loc[(df['positive_ratio'] >= 90) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
+mac = df.loc[(df['positive_ratio'] >= 90) & (df['mac'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head()
+win = df.loc[(df['positive_ratio'] >= 90) & (df['win'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
+linux = df.loc[(df['positive_ratio'] >= 90) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
-    col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
 
-    with col1:
-        st.write("#### Mac: 🍎")
-        st.table(mac[['title', 'user_reviews', 'positive_ratio']])
+with col1:
+    st.write("#### Mac: 🍎")
+    st.table(mac[['title', 'user_reviews', 'positive_ratio']])
 
-    with col2:
-        st.write("#### Windows: 💻")
-        st.table(win[['title', 'user_reviews', 'positive_ratio']])
+with col2:
+    st.write("#### Windows: 💻")
+    st.table(win[['title', 'user_reviews', 'positive_ratio']])
 
-    with col3:
-        st.write("#### Linux: 🐧")
-        st.table(linux[['title', 'user_reviews', 'positive_ratio']])
+with col3:
+    st.write("#### Linux: 🐧")
+    st.table(linux[['title', 'user_reviews', 'positive_ratio']])
 
-    # Plataforma mais compatível com os jogos avaliados
-    st.write("### Plataforma mais compatível com os jogos avaliados:")
-    labels = 'Windows', 'MacOS', 'Linux'
-    sizes = [50076, 13018, 9041]
-    colors = [(0.4, 0.7608, 0.6471), (0.9882, 0.5529, 0.3843), (0.5529, 0.6275, 0.7961)]
-    explode = (0.07, 0.05, 0)
+# Plataforma mais compatível com os jogos avaliados
+st.write("### Plataforma mais compatível com os jogos avaliados:")
+labels = 'Windows', 'MacOS', 'Linux'
+sizes = [50076, 13018, 9041]
+colors = [(0.4, 0.7608, 0.6471), (0.9882, 0.5529, 0.3843), (0.5529, 0.6275, 0.7961)]
+explode = (0.07, 0.05, 0)
 
-    chart_platforms = alt.Chart(pd.DataFrame({'labels': labels, 'sizes': sizes})).mark_bar().encode(
-        x='sizes:O',
-        y=alt.Y('labels:N', sort='-x'),
-        color=alt.Color('labels:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
-        tooltip=['labels:N', 'sizes:O']
-    ).configure_axis(
-        labels=False
-    )
+chart_platforms = alt.Chart(pd.DataFrame({'labels': labels, 'sizes': sizes})).mark_bar().encode(
+    x='sizes:O',
+    y=alt.Y('labels:N', sort='-x'),
+    color=alt.Color('labels:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
+    tooltip=['labels:N', 'sizes:O']
+).configure_axis(
+    labels=False
+)
 
-    st.altair_chart(chart_platforms, use_container_width=True)
+st.altair_chart(chart_platforms, use_container_width=True)
 
-    # Top 5 menos populares nos últimos anos
-    st.write("### Top 5 Jogos Menos Populares nos Últimos Anos:")
-    dados_menos_populares = df.loc[(df['date_release'].dt.year >= 2019) & (df['positive_ratio'] <= 15)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
+# Top 5 menos populares nos últimos anos
+st.write("### Top 5 Jogos Menos Populares nos Últimos Anos:")
+dados_menos_populares = df.loc[(df['date_release'].dt.year >= 2019) & (df['positive_ratio'] <= 15)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
-    chart_unpopular_games = alt.Chart(dados_menos_populares).mark_bar().encode(
-        x='user_reviews:Q',
-        y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
-        tooltip=['title:N', 'user_reviews:Q']
-    ).configure_axis(
-        labels=False
-    )
+chart_unpopular_games = alt.Chart(dados_menos_populares).mark_bar().encode(
+    x='user_reviews:Q',
+    y=alt.Y('title:N', sort='-x'),
+    color=alt.Color('title:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
+    tooltip=['title:N', 'user_reviews:Q']
+).configure_axis(
+    labels=False
+)
 
-    st.altair_chart(chart_unpopular_games, use_container_width=True)
+st.altair_chart(chart_unpopular_games, use_container_width=True)
 
-    # Top 3 jogos grátis bem avaliados
-    st.write("### Top 3 Jogos Grátis Bem Avaliados:")
-    jogos_gratis_bem_avaliados = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] >= 90)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
+# Top 3 jogos grátis bem avaliados
+st.write("### Top 3 Jogos Grátis Bem Avaliados:")
+jogos_gratis_bem_avaliados = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] >= 90)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
 
-    chart_free_positive_games = alt.Chart(jogos_gratis_bem_avaliados).mark_bar().encode(
-        x='user_reviews:Q',
-        y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
-        tooltip=['title:N', 'user_reviews:Q']
-    ).configure_axis(
-        labels=False
-    )
+chart_free_positive_games = alt.Chart(jogos_gratis_bem_avaliados).mark_bar().encode(
+    x='user_reviews:Q',
+    y=alt.Y('title:N', sort='-x'),
+    color=alt.Color('title:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
+    tooltip=['title:N', 'user_reviews:Q']
+).configure_axis(
+    labels=False
+)
 
-    st.altair_chart(chart_free_positive_games, use_container_width=True)
+st.altair_chart(chart_free_positive_games, use_container_width=True)
     
 # Top 3 com avaliação negativa
 st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
