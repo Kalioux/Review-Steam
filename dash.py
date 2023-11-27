@@ -22,27 +22,28 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.write("### Base de Dados:")
     st.write(df)
 
-# Top 5 most expensive games
+  # Top 5 jogos mais caros
 st.write("### Top 5 Jogos Mais Caros:")
-expensive_games = (
-    df[df["price_final"] >= 190].sort_values("price_final", ascending=False).head(5)
+expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
+
+# Criar gráfico de barras com linha de avaliação dos usuários
+chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
+    x='price_final:Q',
+    y=alt.Y('title:N', sort='-x'),
+    color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),
+    tooltip=['title:N', 'price_final:Q']
+).configure_axis(
+    labels=False
 )
 
-colors = ["#27AE60", "#E74C3C", "#2C3E50", "#F39C12", "#9B59B6"]
-
-chart_expensive_games = (
-    alt.Chart(expensive_games)
-    .mark_bar(color="title:N")
-    .encode(
-        x="price_final:Q",
-        y=alt.Y("title:N", sort="-x"),
-        color=alt.Color("title:N", scale=alt.Scale(range=colors)),
-        tooltip=["title:N", "price_final:Q"],
-    )
-    .configure_axis(labels=False)
+# Adicionar a linha de avaliação dos usuários
+rule = alt.Chart(expensive_games).mark_rule(color='red').encode(
+    y='title:N',
+    size=alt.value(3),
+    tooltip=['user_reviews:Q']
 )
 
-st.altair_chart(chart_expensive_games, use_container_width=True)
+st.altair_chart(chart_expensive_games + rule, use_container_width=True)
 
 
     # Top jogos mais populares nos últimos 5 anos
