@@ -2,7 +2,6 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 
-
 emoji = "🎮"
 
 st.set_page_config(page_icon=emoji, layout="wide")
@@ -23,7 +22,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.write("### Base de Dados:")
     st.write(df)
 
-   # Top 5 jogos mais caros
+    # Top 5 jogos mais caros
     st.write("### Top 5 Jogos Mais Caros:")
     expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
 
@@ -36,9 +35,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
         labels=False
     )
 
-    st.altair_chart(chart_expensive_games, use_container_width=True) 
-
-
+    st.altair_chart(chart_expensive_games, use_container_width=True)
 
     # Top jogos mais populares nos últimos 5 anos
     st.write("### Top Jogos Mais Populares (2019 - 2023):")
@@ -123,43 +120,38 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     )
 
     st.altair_chart(chart_free_positive_games, use_container_width=True)
-    
-# Top 3 com avaliação negativa
-st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
-jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
 
-# Especificar cores desejadas
-cores_desejadas = ['#2C3E50', '#E74C3C', '#27AE60']
+    # Top 3 com avaliação negativa
+    st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
+    jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
 
-# Criar gráfico de setores (pizza) com Altair e especificar cores
-figura_pizza = alt.Chart(jogos_com_avaliacao_negativa).mark_arc().encode(
-    theta='user_reviews:Q',
-    color=alt.Color('title:N', scale=alt.Scale(range=cores_desejadas)),
-    tooltip=['title:N', 'user_reviews:Q']
-).properties(
-    width=350,
-    height=350
-)
+    chart_negative_free_games = alt.Chart(jogos_com_avaliacao_negativa).mark_bar().encode(
+        x='user_reviews:Q',
+        y=alt.Y('title:N', sort='x'),
+        color=alt.Color('title:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
+        tooltip=['title:N', 'user_reviews:Q']
+    ).configure_axis(
+        labels=False
+    )
 
-st.altair_chart(figura_pizza, use_container_width=True)
-
+    st.altair_chart(chart_negative_free_games, use_container_width=True)
 
 # Gráfico de jogos compatíveis com todas as plataformas
-st.write("### Jogos Compatíveis com Todas as Plataformas:")
-all_platforms = df[(df['mac'] == True) & (df['win'] == True) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
+    st.write("### Jogos Compatíveis com Todas as Plataformas:")
+    all_platforms = df[(df['mac'] == True) & (df['win'] == True) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
-chart_all_platforms = alt.Chart(all_platforms).mark_bar().encode(
-    x='user_reviews:Q',
-    y=alt.Y('title:N', sort='-x'),
-    color=alt.Color('title:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
-    tooltip=['title:N', 'user_reviews:Q']
-).configure_axis(
-    labels=False
-)
+    chart_all_platforms = alt.Chart(all_platforms).mark_bar().encode(
+        x='user_reviews:Q',
+        y=alt.Y('title:N', sort='-x'),
+        color=alt.Color('title:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
+        tooltip=['title:N', 'user_reviews:Q']
+    ).configure_axis(
+        labels=False
+    )
 
-st.altair_chart(chart_all_platforms, use_container_width=True)
+    st.altair_chart(chart_all_platforms, use_container_width=True)
 
-# Porcentagem de jogos com desconto
+    # Porcentagem de jogos com desconto
 st.write("### Porcentagem de Jogos com Desconto:")
 percentage_discounted = int((df['discount'].sum() / len(df)) * 100)
 st.write(f"Aproximadamente {percentage_discounted} jogos possuem desconto.")
