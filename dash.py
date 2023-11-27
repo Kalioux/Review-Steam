@@ -44,8 +44,8 @@ line_chart = alt.Chart(expensive_games).mark_rule(color='orange').encode(
 combined_chart = (bar_chart + line_chart).properties(height=300)
 
 # Exibir o gráfico com o Streamlit
-st.write("### Top 5 Jogos Mais Caros:")
-st.altair_chart(combined_chart, use_container_width=True)
+    st.write("### Top 5 Jogos Mais Caros:")
+    st.altair_chart(combined_chart, use_container_width=True)
 
 
     # Top jogos mais populares nos últimos 5 anos
