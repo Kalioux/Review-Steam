@@ -23,23 +23,22 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.write("### Base de Dados:")
     st.write(df)
 
-   # Top 5 jogos mais caros
-    st.write("### Top 5 Jogos Mais Caros:")
-    expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
+# Top 5 jogos mais caros
+st.write("### Top 5 Jogos Mais Caros:")
+expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
 
-    chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
-        x='price_final:Q',
-        y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),  # Alterada para 'viridis'
-        tooltip=['title:N', 'price_final:Q']
-    ).configure_axis(
-        labels=False
-    )
+# Criar gráfico de barras com cores diferentes para cada barra
+chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
+    x='price_final:Q',
+    y=alt.Y('title:N', sort='-x'),
+    color=alt.Color('title:N', scale=alt.Scale(scheme='category20')),
+    tooltip=['title:N', 'price_final:Q']
+).configure_axis(
+    labels=False
+)
 
-    st.altair_chart(chart_expensive_games, use_container_width=True) 
-
-
-
+# Exibir o gráfico com o Streamlit
+st.altair_chart(chart_expensive_games)
     # Top jogos mais populares nos últimos 5 anos
     st.write("### Top Jogos Mais Populares (2019 - 2023):")
     dados_populares = df.loc[(df['date_release'].dt.year >= 2019) & (df['date_release'].dt.year <= 2023)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
