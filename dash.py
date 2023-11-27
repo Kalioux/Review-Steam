@@ -1,45 +1,45 @@
-import pandas as pd
-import streamlit as st
-import altair as alt
+    import pandas as pd
+    import streamlit as st
+    import altair as alt
 
-emoji = "🎮"
+    emoji = "🎮"
 
-st.set_page_config(page_icon=emoji, layout="wide")
+    st.set_page_config(page_icon=emoji, layout="wide")
 
-# Carregar a base de dados
-df = pd.read_csv('games.csv')
+    # Carregar a base de dados
+    df = pd.read_csv('games.csv')
 
-# Título do Dashboard
-st.write("# Análise do Custo-Benefício na Compra de Jogos na Steam 🕹️")
+    # Título do Dashboard
+    st.write("# Análise do Custo-Benefício na Compra de Jogos na Steam 🕹️")
 
-# Converter a coluna 'date_release' para datetime, se ainda não estiver no formato certo
-if 'date_release' in df.columns and pd.api.types.is_object_dtype(df['date_release']):
-    df['date_release'] = pd.to_datetime(df['date_release'], errors='coerce')
+    # Converter a coluna 'date_release' para datetime, se ainda não estiver no formato certo
+    if 'date_release' in df.columns and pd.api.types.is_object_dtype(df['date_release']):
+        df['date_release'] = pd.to_datetime(df['date_release'], errors='coerce')
 
-# Verificar se a conversão foi bem-sucedida
-if pd.api.types.is_datetime64_any_dtype(df['date_release']):
-    # Exibir a base de dados
-    st.write("### Base de Dados:")
-    st.write(df)
+    # Verificar se a conversão foi bem-sucedida
+    if pd.api.types.is_datetime64_any_dtype(df['date_release']):
+        # Exibir a base de dados
+        st.write("### Base de Dados:")
+        st.write(df)
 
-# Top 5 jogos mais caros
-st.write("### Top 5 Jogos Mais Caros:")
-expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
+    # Top 5 jogos mais caros
+    st.write("### Top 5 Jogos Mais Caros:")
+    expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
+    
+    # Criar gráfico de barras com cores diferentes para cada barra
+    chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
+        x='price_final:Q',
+        y=alt.Y('title:N', sort='-x'),
+        color=alt.Color('title:N', scale=alt.Scale(scheme='category20')),
+        tooltip=['title:N', 'price_final:Q']
+    ).configure_axis(
+        labels=False
+    )
 
-# Criar gráfico de barras com cores diferentes para cada barra
-chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
-    x='price_final:Q',
-    y=alt.Y('title:N', sort='-x'),
-    color=alt.Color('title:N', scale=alt.Scale(scheme='category20')),
-    tooltip=['title:N', 'price_final:Q']
-).configure_axis(
-    labels=False
-)
+    # Exibir o gráfico com o Streamlit
+    st.altair_chart(chart_expensive_games)
 
-# Exibir o gráfico com o Streamlit
-st.altair_chart(chart_expensive_games)
-
-# Restante do código...
+    # Restante do código...
 
 
 
