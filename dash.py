@@ -2,6 +2,7 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 
+
 emoji = "🎮"
 
 st.set_page_config(page_icon=emoji, layout="wide")
@@ -22,41 +23,22 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.write("### Base de Dados:")
     st.write(df)
 
-    # Top 5 jogos mais caros
-    # Filtrar os jogos mais caros
-    expensive_games = df[(df['price_final'] >= 190)].sort_values(['price_final'], ascending=False).head(5)
-
-    # Configuração do gráfico com Altair
-    bar_chart = alt.Chart(expensive_games).mark_bar(
-        color='blue',
-        opacity=0.7
-    ).encode(
-        x=alt.X('price_final:Q', title='Preço Final (R$)'),
-        y=alt.Y('title:N', sort='-x', title='Jogos'),
-        tooltip=['title:N', 'price_final:Q']
-    ).properties(
-        width=500,
-        title='Top 5 Jogos Mais Caros'
-    )
-
-    line_chart = alt.Chart(expensive_games).mark_line(
-        color='orange',
-        strokeWidth=2,
-        point=True
-    ).encode(
-        x=alt.X('positive_ratio:Q', title='Avaliação Positiva (%)'),
-        y=alt.Y('title:N', sort='-x', title='Jogos'),
-        tooltip=['title:N', 'positive_ratio:Q']
-    )
-
-    # Combinar os gráficos de barras e linha
-    combined_chart = alt.layer(bar_chart, line_chart).resolve_scale(
-        y='independent'
-    )
-
-    # Exibir o gráfico com o Streamlit
+   # Top 5 jogos mais caros
     st.write("### Top 5 Jogos Mais Caros:")
-    st.altair_chart(combined_chart, use_container_width=True)
+    expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
+
+    chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
+        x='price_final:Q',
+        y=alt.Y('title:N', sort='-x'),
+        color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),  # Alterada para 'viridis'
+        tooltip=['title:N', 'price_final:Q']
+    ).configure_axis(
+        labels=False
+    )
+
+    st.altair_chart(chart_expensive_games, use_container_width=True) 
+
+
 
     # Top jogos mais populares nos últimos 5 anos
     st.write("### Top Jogos Mais Populares (2019 - 2023):")
@@ -141,49 +123,50 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     )
 
     st.altair_chart(chart_free_positive_games, use_container_width=True)
+    
+# Top 3 com avaliação negativa
+st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
+jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
 
-    # Top 3 com avaliação negativa
-    st.write("### Top 3 Jogos Gratuitos com Avaliação Negativa:")
-    jogos_com_avaliacao_negativa = df.loc[(df['price_final'] == 0) & (df['positive_ratio'] <= 30)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(3)
+# Especificar cores desejadas
+cores_desejadas = ['#2C3E50', '#E74C3C', '#27AE60']
 
-    # Especificar cores desejadas
-    cores_desejadas = ['#2C3E50', '#E74C3C', '#27AE60']
+# Criar gráfico de setores (pizza) com Altair e especificar cores
+figura_pizza = alt.Chart(jogos_com_avaliacao_negativa).mark_arc().encode(
+    theta='user_reviews:Q',
+    color=alt.Color('title:N', scale=alt.Scale(range=cores_desejadas)),
+    tooltip=['title:N', 'user_reviews:Q']
+).properties(
+    width=350,
+    height=350
+)
 
-    # Criar gráfico de setores (pizza) com Altair e especificar cores
-    figura_pizza = alt.Chart(jogos_com_avaliacao_negativa).mark_arc().encode(
-        theta='user_reviews:Q',
-        color=alt.Color('title:N', scale=alt.Scale(range=cores_desejadas)),
-        tooltip=['title:N', 'user_reviews:Q']
-    ).properties(
-        width=350,
-        height=350
-    )
+st.altair_chart(figura_pizza, use_container_width=True)
 
-    st.altair_chart(figura_pizza, use_container_width=True)
 
-    # Gráfico de jogos compatíveis com todas as plataformas
-    st.write("### Jogos Compatíveis com Todas as Plataformas:")
-    all_platforms = df[(df['mac'] == True) & (df['win'] == True) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
+# Gráfico de jogos compatíveis com todas as plataformas
+st.write("### Jogos Compatíveis com Todas as Plataformas:")
+all_platforms = df[(df['mac'] == True) & (df['win'] == True) & (df['linux'] == True)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
-    chart_all_platforms = alt.Chart(all_platforms).mark_bar().encode(
-        x='user_reviews:Q',
-        y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
-        tooltip=['title:N', 'user_reviews:Q']
-    ).configure_axis(
-        labels=False
-    )
+chart_all_platforms = alt.Chart(all_platforms).mark_bar().encode(
+    x='user_reviews:Q',
+    y=alt.Y('title:N', sort='-x'),
+    color=alt.Color('title:N', scale=alt.Scale(scheme='magma')),  # Alterada para 'magma'
+    tooltip=['title:N', 'user_reviews:Q']
+).configure_axis(
+    labels=False
+)
 
-    st.altair_chart(chart_all_platforms, use_container_width=True)
+st.altair_chart(chart_all_platforms, use_container_width=True)
 
-    # Porcentagem de jogos com desconto
-    st.write("### Porcentagem de Jogos com Desconto:")
-    percentage_discounted = int((df['discount'].sum() / len(df)) * 100)
-    st.write(f"Aproximadamente {percentage_discounted} jogos possuem desconto.")
+# Porcentagem de jogos com desconto
+st.write("### Porcentagem de Jogos com Desconto:")
+percentage_discounted = int((df['discount'].sum() / len(df)) * 100)
+st.write(f"Aproximadamente {percentage_discounted} jogos possuem desconto.")
 
-    # Porcentagem de jogos compatíveis com Steam Deck
-    st.write("### Porcentagem de Jogos Compatíveis com Steam Deck:")
-    percentage_steam_deck = int((df['steam_deck'].sum() / len(df)) * 100)
-    st.write(f"Aproximadamente {percentage_steam_deck}% dos jogos são compatíveis com Steam Deck.")
+# Porcentagem de jogos compatíveis com Steam Deck
+st.write("### Porcentagem de Jogos Compatíveis com Steam Deck:")
+percentage_steam_deck = int((df['steam_deck'].sum() / len(df)) * 100)
+st.write(f"Aproximadamente {percentage_steam_deck}% dos jogos são compatíveis com Steam Deck.")
 
 # that´s all folks...
