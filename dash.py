@@ -23,7 +23,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.write("### Base de Dados:")
     st.write(df)
 
-  # Filtrar os jogos mais caros
+# Filtrar os jogos mais caros
 expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
 
 # Configuração do gráfico de barras horizontais
@@ -32,13 +32,10 @@ bar_chart = alt.Chart(expensive_games).mark_bar().encode(
     y=alt.Y('title:N', sort='-x'),
     color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),
     tooltip=['title:N', 'price_final:Q']
-).configure_axis(
-    labels=False
 )
 
 # Configuração da linha para a avaliação positiva
-line_chart = alt.Chart(expensive_games).mark_line(color='orange', point=True).encode(
-    x='positive_ratio:Q',
+line_chart = alt.Chart(expensive_games).mark_rule(color='orange').encode(
     y=alt.Y('title:N', sort='-x'),
     tooltip=['title:N', 'positive_ratio:Q']
 )
@@ -49,7 +46,6 @@ combined_chart = (bar_chart + line_chart).properties(height=300)
 # Exibir o gráfico com o Streamlit
 st.write("### Top 5 Jogos Mais Caros:")
 st.altair_chart(combined_chart, use_container_width=True)
-
 
 
     # Top jogos mais populares nos últimos 5 anos
