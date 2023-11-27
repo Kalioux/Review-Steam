@@ -44,7 +44,7 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.write("### Top 5 Jogos Mais Caros:")
     st.altair_chart(combined_chart, use_container_width=True)
 
-    # Top jogos mais populares nos últimos 5 anos
+      # Top jogos mais populares nos últimos 5 anos
     st.write("### Top Jogos Mais Populares (2019 - 2023):")
     dados_populares = df.loc[(df['date_release'].dt.year >= 2019) & (df['date_release'].dt.year <= 2023)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
