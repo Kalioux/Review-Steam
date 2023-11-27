@@ -2,7 +2,6 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 
-
 emoji = "🎮"
 
 st.set_page_config(page_icon=emoji, layout="wide")
@@ -39,6 +38,12 @@ chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
 
 # Exibir o gráfico com o Streamlit
 st.altair_chart(chart_expensive_games)
+
+# Restante do código...
+
+
+
+
     # Top jogos mais populares nos últimos 5 anos
     st.write("### Top Jogos Mais Populares (2019 - 2023):")
     dados_populares = df.loc[(df['date_release'].dt.year >= 2019) & (df['date_release'].dt.year <= 2023)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
