@@ -24,19 +24,39 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
     st.write(df)
 
    # Top 5 jogos mais caros
-    st.write("### Top 5 Jogos Mais Caros:")
-    expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
+    # Filtrar os jogos mais caros
+expensive_games = df[(df['price_final'] >= 190)].sort_values(['price_final'], ascending=False).head(5)
 
-    chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
-        x='price_final:Q',
-        y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),  # Alterada para 'viridis'
-        tooltip=['title:N', 'price_final:Q']
-    ).configure_axis(
-        labels=False
-    )
+# Configuração do gráfico com Altair
+bar_chart = alt.Chart(expensive_games).mark_bar(
+    color='blue',
+    opacity=0.7
+).encode(
+    x=alt.X('price_final:Q', title='Preço Final (R$)'),
+    y=alt.Y('title:N', sort='-x', title='Jogos'),
+    tooltip=['title:N', 'price_final:Q']
+).properties(
+    width=500,
+    title='Top 5 Jogos Mais Caros'
+)
 
-    st.altair_chart(chart_expensive_games, use_container_width=True) 
+line_chart = alt.Chart(expensive_games).mark_line(
+    color='orange',
+    strokeWidth=2,
+    point=True
+).encode(
+    x=alt.X('positive_ratio:Q', title='Avaliação Positiva (%)'),
+    y=alt.Y('title:N', sort='-x', title='Jogos'),
+    tooltip=['title:N', 'positive_ratio:Q']
+)
+
+# Combinar os gráficos de barras e linha
+combined_chart = alt.layer(bar_chart, line_chart).resolve_scale(
+    y='independent'
+)
+
+# Exibir o gráfico com o Streamlit
+altair_chart = altair_chart(combined_chart, use_container_width=True)
 
 
 
