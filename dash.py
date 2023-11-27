@@ -160,9 +160,8 @@ chart_all_platforms = alt.Chart(all_platforms).mark_bar().encode(
 st.altair_chart(chart_all_platforms, use_container_width=True)
 
 # Porcentagem de jogos com desconto
-st.write("### Porcentagem de Jogos com Desconto:")
-percentage_discounted = int((df['discount'].sum() / len(df)) * 100)
-st.write(f"Aproximadamente {percentage_discounted} jogos possuem desconto.")
+discounted_games_count = len(df[df['discount'] > 0])
+st.write(f"{discounted_games_count} jogos tiveram desconto no ato da compra.")
 
 # Porcentagem de jogos compatíveis com Steam Deck
 st.write("### Porcentagem de Jogos Compatíveis com Steam Deck:")
