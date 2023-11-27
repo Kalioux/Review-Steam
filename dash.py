@@ -44,24 +44,25 @@ line_chart = alt.Chart(expensive_games).mark_rule(color='orange').encode(
 combined_chart = (bar_chart + line_chart).properties(height=300)
 
 # Exibir o gráfico com o Streamlit
-    st.write("### Top 5 Jogos Mais Caros:")
-    st.altair_chart(combined_chart, use_container_width=True)
+st.write("### Top 5 Jogos Mais Caros:")
+st.altair_chart(combined_chart, use_container_width=True)
 
 
-    # Top jogos mais populares nos últimos 5 anos
-    st.write("### Top Jogos Mais Populares (2019 - 2023):")
-    dados_populares = df.loc[(df['date_release'].dt.year >= 2019) & (df['date_release'].dt.year <= 2023)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
+# Top jogos mais populares nos últimos 5 anos
+st.write("### Top Jogos Mais Populares (2019 - 2023):")
+dados_populares = df.loc[(df['date_release'].dt.year >= 2019) & (df['date_release'].dt.year <= 2023)].sort_values(['user_reviews', 'positive_ratio'], ascending=[False, False]).head(5)
 
-    chart_populares = alt.Chart(dados_populares).mark_bar().encode(
-        x='user_reviews:Q',
-        y=alt.Y('title:N', sort='-x'),
-        color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),  # Alterada para 'viridis'
-        tooltip=['title:N', 'user_reviews:Q']
-    ).configure_axis(
-        labels=False
-    )
+chart_populares = alt.Chart(dados_populares).mark_bar().encode(
+    x='user_reviews:Q',
+    y=alt.Y('title:N', sort='-x'),
+    color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),  # Alterada para 'viridis'
+    tooltip=['title:N', 'user_reviews:Q']
+).configure_axis(
+    labels=False
+)
 
-    st.altair_chart(chart_populares, use_container_width=True)
+st.altair_chart(chart_populares, use_container_width=True)
+
 
     # Top 5 jogos mais populares no Mac, Windows e Linux
     st.write("### Top 5 Jogos Mais Populares por Plataforma:")
