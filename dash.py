@@ -2,7 +2,6 @@ import pandas as pd
 import streamlit as st
 import altair as alt
 
-
 emoji = "🎮"
 
 st.set_page_config(page_icon=emoji, layout="wide")
@@ -27,10 +26,11 @@ if pd.api.types.is_datetime64_any_dtype(df['date_release']):
 st.write("### Top 5 Jogos Mais Caros:")
 expensive_games = df[df['price_final'] >= 190].sort_values('price_final', ascending=False).head(5)
 
+# Criar gráfico de barras com cores diferentes para cada barra
 chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
     x='price_final:Q',
     y=alt.Y('title:N', sort='-x'),
-    color=alt.Color('title:N', scale=alt.Scale(scheme='viridis')),
+    color=alt.Color('title:N', scale=alt.Scale(scheme='category20')),
     tooltip=['title:N', 'price_final:Q']
 ).configure_axis(
     labels=False
@@ -38,8 +38,6 @@ chart_expensive_games = alt.Chart(expensive_games).mark_bar().encode(
 
 # Exibir o gráfico com o Streamlit
 st.altair_chart(chart_expensive_games)
-
-
 
 
     # Top jogos mais populares nos últimos 5 anos
